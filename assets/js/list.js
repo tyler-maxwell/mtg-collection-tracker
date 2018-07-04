@@ -59,9 +59,9 @@ var displayTable = function(listName) {
     if (listName == "collection") {
         var cardList = users.child("/" + currentUser + "/collection/cards");
         cardList.once('value', function(snapshot) {
-            snapshot.forEach(function(childSnapshot) {
-              var childData = childSnapshot.val();
-              console.log(childData);
+            snapshot.forEach(function(cardSnapshot) {
+              var cardData = cardSnapshot.val();
+              console.log(cardData);
             });
         });
     }
