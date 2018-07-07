@@ -12,6 +12,7 @@
 //     console.log(result);
 
 // });
+$(document).ready(checkUser);
 
 //Variables..
 var currentUser = "";  
@@ -67,10 +68,31 @@ $("#logged").on("click", function (event) {
             console.log(currentUser);
             $(".card").hide();
             getDecks();
-            createDeck()
+            createDeck();
+//Clears Local storage and adds username to local storage upon login..
+            localStorage.clear();
+            localStorage.setItem("username", name);
         };
      });
 });
+
+
+// check if stored data from register-form is equal to entered data in the   login-form
+function checkUser() {
+
+    // stored data from the register-form
+    var storedName = localStorage.getItem('username');
+
+    // check if stored data from register-form is equal to data from login form
+    if (storedName !== null) {
+        currentUser = storedName;
+        $(".card").hide();
+            getDecks();
+            createDeck();
+    }
+    console.log(storedName);
+}
+
 
 // Create User/Password Function.
     $("#created").on("click", function (event) {
@@ -111,16 +133,11 @@ var newUser = function(username, password) {
     });
  };
 
-// When logged in, display a button (or similar element) that when clicked will display the user's owned cards.
-
-
-
-
 // Build a form for the user to create a new deck.
 function createDeck() {
     $form = $("<form></form>");
     $form.append('<input type="text" value="text" id="deck-input">');
-    $form.append('<input type="button" value="button" id="confirm">');
+    $form.append('<input type="button" value="Add to Deck" id="confirm">');
     $('body').append($form)
     $("#confirm").on("click", function (event) {
         event.preventDefault();
@@ -139,6 +156,10 @@ var addDeck = function(deckName) {
 // Dynamically display buttons (or similar elements) for all decks created by the user that when clicked will display the cards in that deck.
 
 var getDecks =  function() {
+    var collectionButton = $("<button>").attr("class", "collection-button");
+    collectionButton.text("Collection");
+    $("#collection").append(collectionButton);
+
     var deckList = users.child("/" + currentUser + "/decks");
     deckList.once("value", function(snapshot) {
         console.log(snapshot.val());
@@ -146,6 +167,9 @@ var getDecks =  function() {
             deckData = deckSnapshot.val();
             console.log(deckData);
             console.log(deckData.deckName);
+            var deckButton = $("<button>").attr("class", "deck-button");
+            deckButton.text(deckData.deckName);
+            $("#collection").append(deckButton);
         });
     });
  };
