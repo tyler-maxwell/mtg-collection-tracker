@@ -470,9 +470,9 @@ $(document.body).on("click", "#addCards-submit", function(event) {
         var amount = "";
         for (var i = 0; i < line.length; i++) {
             // Check if character at [i] is a number and grab cardName and Amount
-            if (line[i] == "0" || line[i] == "1" || line[i] == "2" || line[i] == "3" || line[i] == "4" || line[i] == "5" || line[i] == "6" || line[i] == "7" || line[i] == "8" || line[i] == "9") {
-                cardName = line.substring(0, i).trim();
-                amount = line.substring(i).trim();
+            if (line[i] != "0" && line[i] != "1" && line[i] != "2" && line[i] != "3" && line[i] != "4" && line[i] != "5" && line[i] != "6" && line[i] != "7" && line[i] != "8" && line[i] != "9") {
+                amount = line.substring(0, i).trim();
+                cardName = line.substring(i).trim();
                 break;
             }
             // If number check was never passed add to badLines
@@ -536,9 +536,9 @@ $(document.body).on("click", "#removeCards-submit", function(event) {
         var amount = "";
         for (var i = 0; i < line.length; i++) {
             // Check if character at [i] is a number and grab cardName and Amount
-            if (line[i] == "0" || line[i] == "1" || line[i] == "2" || line[i] == "3" || line[i] == "4" || line[i] == "5" || line[i] == "6" || line[i] == "7" || line[i] == "8" || line[i] == "9") {
-                cardName = line.substring(0, i).trim();
-                amount = line.substring(i).trim();
+            if (line[i] != "0" && line[i] != "1" && line[i] != "2" && line[i] != "3" && line[i] != "4" && line[i] != "5" && line[i] != "6" && line[i] != "7" && line[i] != "8" && line[i] != "9") {
+                amount = line.substring(0, i).trim();
+                cardName = line.substring(i).trim();
                 break;
             }
             // If number check was never passed add to badLines
