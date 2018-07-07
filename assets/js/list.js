@@ -1,7 +1,12 @@
 // Global Variables
-var currentUser = "demo";
+var currentUser = "";  
+var name = "";
+var pass = "";
+var userCreate = "";
+var passCreate = "";
+var passConfirm = "";    
 var scryfallURL = "https://api.scryfall.com/cards/search?q=";
-var currentList = "Goblins";
+var currentList = "collection";
 var pages = 0;
 var page = 0;
 
@@ -19,13 +24,127 @@ firebase.initializeApp(config);
 var database = firebase.database();
 var users = database.ref("/users");
 
-// Add Deck
+// check if stored data from register-form is equal to entered data in the   login-form
+function checkUser() {
+
+    // stored data from the register-form
+    var storedName = localStorage.getItem("username");
+ 
+    // check if stored data from register-form is equal to data from login form
+    if (storedName !== null) {
+        currentUser = storedName;
+        $(".card").hide();
+        getDecks();
+        createDeck();
+        displayDashboard(currentList);
+        displayTable(currentList);
+    }
+    console.log(storedName);
+ }
+
+// Login Function.
+$("#logged").on("click", function (event) {
+    event.preventDefault();
+    var name = $("#username-input").val().trim();
+    var pass = $("#password-input").val().trim();
+    users.once("value", function(snapshot) {
+        var validUser = false;
+        var validPass = false;
+        snapshot.forEach(function(userSnapshot) {
+            if (userSnapshot.val().username == name) {
+                validUser = true;
+                if (userSnapshot.val().password == pass)  {
+                    validPass = true;
+                }
+            }
+        });
+        if (validUser == false) {
+            alert("invalid user");
+        }
+        else if (validPass == false) {
+            alert("invalid password");
+        }
+        else {
+            currentUser = name;
+            localStorage.clear();
+            localStorage.setItem("username", currentUser);
+            $(".card").hide();
+            getDecks();
+            createDeck();
+            displayDashboard(currentList);
+            displayTable(currentList);
+        };
+     });
+});
+// Create User/Password Function.
+    $("#created").on("click", function (event) {
+        event.preventDefault();
+            
+    var userCreate = $("#userCreate-input").val().trim();
+    var passCreate = $("#passwordCreate-input").val().trim();
+    var passConfirm = $("#passwordConfirm-input").val().trim();
+    if(passCreate === passConfirm) {
+        newUser(userCreate,passCreate);
+    };
+
+    
+//Code here to reference data base and look to see if username has already been added or not// If userName has been added  alert(newUserName must be chosen) If userName not added previously user can continue with creating account.
+});
+var newUser = function(username, password) {
+    var invalidUser = false;
+    users.once("value", function(snapshot) {
+        snapshot.forEach(function(userSnapshot) {
+            if (username == userSnapshot.val().username) {
+                invalidUser = true;
+            }
+        });
+        if (invalidUser == true) {
+            alert("Username is already taken.");
+        }
+        else {
+            users.child(username).set({
+                username: username,
+                password: password
+            });
+        };
+    });
+ };
+// Build a form for the user to create a new deck.
+function createDeck() {
+    $form = $("<form></form>");
+    $form.append('<input type="text" value="text" id="deck-input">');
+    $form.append('<input type="button" value="Add to Deck" id="confirm">');
+    $('#userStuff').append($form)
+    $("#confirm").on("click", function (event) {
+        event.preventDefault();
+        var deckName = $("#deck-input").val().trim();
+        addDeck(deckName);
+        getDecks();
+    });
+}
+// Function that will add newly created deck to the database...
 var addDeck = function(deckName) {
     var decks = users.child("/" + currentUser + "/decks");
     decks.child(deckName).set({
         deckName: deckName
     });  
 };
+// Dynamically display buttons (or similar elements) for all decks created by the user that when clicked will display the cards in that deck.
+var getDecks =  function() {
+    $("#collection").empty();
+    var collectionButton = $("<button>").attr("class", "collection-button");
+    collectionButton.text("Collection");
+    $("#collection").append(collectionButton);
+    var deckList = users.child("/" + currentUser + "/decks");
+    deckList.once("value", function(snapshot) {
+        snapshot.forEach(function(deckSnapshot) {
+            deckData = deckSnapshot.val();
+            var deckButton = $("<button>").attr("class", "deck-button");
+            deckButton.text(deckData.deckName);
+            $("#collection").append(deckButton);
+        });
+    });
+ };
 
 // Change Deck Name
 var changeDeckName = function (oldDeckName, newDeckName) {
@@ -36,6 +155,7 @@ var changeDeckName = function (oldDeckName, newDeckName) {
         var update = {}; // Creat an array of updates (because .set() does not allow partial changes to elements)
         update[oldDeckName] = null; // Delete the old deck from the database
         update[newDeckName] = deckData; // Create a new deck with the altered copy of deckData
+        getDecks();
         return decks.update(update); // Push update changes
     });
 };
@@ -156,6 +276,9 @@ var changeCardAmount = function(listName, cardName, amount) {
 
 // Display Dashboard
 var displayDashboard = function(listName) {
+    $("#table-title").empty();
+    $("#dashboard").empty();
+
     // Generate title
     var title;
     if (listName == "collection") {
@@ -422,6 +545,25 @@ var displayTable = function(listName) {
     $("#list").append(table);
 };
 
+// Click event for collection-button
+$(document.body).on("click", ".collection-button", function(event) {
+    event.preventDefault();
+    currentList = "collection";
+
+    displayDashboard(currentList);
+    displayTable(currentList);
+});
+
+// Click event for collection-button
+$(document.body).on("click", ".deck-button", function(event) {
+    event.preventDefault();;
+    currentList = $(this).text();
+    console.log(currentList);
+
+    displayDashboard(currentList);
+    displayTable(currentList);
+});
+
 // Click event for updating the table
 $(document.body).on("click", "#update", function(event) {
     event.preventDefault();
@@ -584,5 +726,4 @@ $(document.body).on("click", "#removeCards-submit", function(event) {
     // $('#removeCards-input').val(badText);
 });
 
-displayDashboard(currentList);
-displayTable(currentList);
+$(document).ready(checkUser);
