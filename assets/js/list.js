@@ -206,7 +206,7 @@ var displayDashboard = function(listName) {
     var addCards = $("<div>").attr("class", "col-md-3");
     var addCardsForm = $("<form>").attr("id", "addCards-form");
     var addCardsLabel = $("<label>").attr("for", "addCards-input").text("Add Cards");
-    var addCardsInput = $("<textarea>").attr("id", "addCards-input");
+    var addCardsInput = $("<textarea>").attr("id", "addCards-input").attr("placeholder", "[amount] [card name]\n[amount] [card name]\n...");
     var addCardsSubmit = $("<input>").attr("type", "submit").attr("id", "addCards-submit").text("Submit");
     addCardsForm.append(addCardsLabel);
     addCardsForm.append(addCardsInput);
@@ -217,7 +217,7 @@ var displayDashboard = function(listName) {
     var removeCards = $("<div>").attr("class", "col-md-3");
     var removeCardsForm = $("<form>").attr("id", "removeCards-form");
     var removeCardsLabel = $("<label>").attr("for", "removeCards-input").text("Remove Cards");
-    var removeCardsInput = $("<textarea>").attr("id", "removeCards-input");
+    var removeCardsInput = $("<textarea>").attr("id", "removeCards-input").attr("placeholder", "[amount] [card name]\n[amount] [card name]\n...");
     var removeCardsSubmit = $("<input>").attr("type", "submit").attr("id", "removeCards-submit").text("Submit");
     removeCardsForm.append(removeCardsLabel);
     removeCardsForm.append(removeCardsInput);
