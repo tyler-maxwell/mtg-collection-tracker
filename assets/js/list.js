@@ -140,12 +140,12 @@ var changeCardAmount = function(listName, cardName, amount) {
         var cardList = users.child("/" + currentUser + "/decks/" + listName + "/cards");
         cardList.child(cardName).once("value", function(snapshot) {
             // If amount is reduced to be equal to or below 0 remove all card data from database
-            if ((snapshot.val().amount - amount) <= 0) { 
+            if ((parseInt(snapshot.val().amount) - parseInt(amount)) <= 0) { 
                 cardList.child(cardName).remove();
             }
             // If amount remains positive update the amount
             else { 
-                var newAmount = snapshot.val().amount - amount;
+                var newAmount = parseInt(snapshot.val().amount) - parseInt(amount);
                 var update = {};
                 update["amount"] = newAmount;
                 return cardList.child(cardName).update(update);
@@ -523,7 +523,7 @@ $(document.body).on("click", "#addCards-submit", function(event) {
     // $('#addCards-input').val(badText);
 });
 
-// Click event for submitting new cards to deck or collection
+// Click event for removing cards from deck or collection
 $(document.body).on("click", "#removeCards-submit", function(event) {
     event.preventDefault();
 
@@ -567,7 +567,7 @@ $(document.body).on("click", "#removeCards-submit", function(event) {
                 result.forEach(function(card) { 
                     // Get exact card match
                     if (cardName.toLowerCase() === (card.name).toLowerCase()) {
-                        changeCardAmount(currentList, cardName, amount);
+                        changeCardAmount(currentList, card.name, amount);
                     }
                     // Else if cardName was not a real card add to badLines
                     else {
