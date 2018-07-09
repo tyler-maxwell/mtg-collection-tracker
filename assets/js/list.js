@@ -36,6 +36,7 @@ addCardToCollection
 addCardToDeck
 changeCardAmount
 displayDashboard
+displayCharts
 displayTable
 */
 
@@ -862,6 +863,7 @@ var displayTable = function(listName) {
 #deckName-submit
 #addCards-submit
 #removeCards-submit
+#charts-button
 */
 
 // Click event for login
