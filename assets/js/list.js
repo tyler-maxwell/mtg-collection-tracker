@@ -621,6 +621,7 @@ var displayCharts = function() {
 // Display Cards on Table
 var displayTable = function(listName) {
     $("#list").empty();
+    totalMana = [];
 
     // Create table elements
     var table = $("<table>").attr("class", "table").attr("id", "card-table");
@@ -919,6 +920,7 @@ $(document.body).on("click", ".deck-button", function(event) {
 $(document.body).on("click", "#update", function(event) {
     event.preventDefault();
 
+    displayDashboard(currentList);
     displayTable(currentList);
 });
 
