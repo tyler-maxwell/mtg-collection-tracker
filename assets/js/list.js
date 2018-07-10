@@ -1,15 +1,10 @@
 // Global Variables
-var currentUser = "";  
-var name = "";
-var pass = "";
-var userCreate = "";
-var passCreate = "";
-var passConfirm = "";    
+var currentUser = "";   
 var scryfallURL = "https://api.scryfall.com/cards/search?q=";
 var currentList = "collection";
 var pages = 0;
 var page = 0;
-
+var totalMana = [];
 
 // Initialize Firebase
 var config = {
@@ -24,29 +19,164 @@ firebase.initializeApp(config);
 var database = firebase.database();
 var users = database.ref("/users");
 
-// check if stored data from register-form is equal to entered data in the   login-form
-function checkUser() {
+/*
+***functions***
+checkUser
+displayLogin
+displayCreateAccount
+login
+createAccount
+displayUserInfo
+logout
+displayCreateDeck
+createDeck
+getDecks
+changeDeckName
+addCardToCollection
+addCardToDeck
+changeCardAmount
+displayDashboard
+displayCharts
+displayTable
+*/
 
-    // stored data from the register-form
+// Check local storage for active login
+var checkUser = function() {
     var storedName = localStorage.getItem("username");
- 
-    // check if stored data from register-form is equal to data from login form
     if (storedName !== null) {
         currentUser = storedName;
         $(".card").hide();
+        displayUserInfo();
         getDecks();
-        createDeck();
+        displayCreateDeck();
         displayDashboard(currentList);
         displayTable(currentList);
     }
-    console.log(storedName);
- }
+    else{
+        displayLogin();
+        displayCreateAccount();
+    };
+};
 
-// Login Function.
-$("#logged").on("click", function (event) {
-    event.preventDefault();
-    var name = $("#username-input").val().trim();
-    var pass = $("#password-input").val().trim();
+// Display login card
+var displayLogin = function () {
+    var card = $("<div>").attr("class", "card");
+    card.attr("style", "width: 18rem;");
+    var cardBody = $("<div>").attr("class", "card-body");
+
+    var cardTitle = $("<h5>").attr("class", "card-title");
+    cardTitle.text("Login");
+    var loginForm = $("<form>");
+
+    var usernameGroup = $("<div>").attr("class", "form-group");
+    var usernameLabel = $("<label>").attr("for", "text");
+    usernameLabel.text("User Name");
+    var usernameInput = $("<input>").attr("class", "form-control");
+    usernameInput.attr("type", "text");
+    usernameInput.attr("id", "username-input");
+    usernameInput.attr("placeholder", "User Name");
+    var usernameSmall = $("<small>").attr("class", "form-text text-muted");
+    usernameSmall.attr("id", "usernameHelp");
+    usernameSmall.text("We'll never share your username with anyone else.");
+    usernameGroup.append(usernameLabel);
+    usernameGroup.append(usernameInput);
+    usernameGroup.append(usernameSmall);
+    loginForm.append(usernameGroup);
+
+    var passwordGroup = $("<div>").attr("class", "form-group");
+    var passwordLabel = $("<label>").attr("for", "text");
+    passwordLabel.text("Password");
+    var passwordInput = $("<input>").attr("class", "form-control");
+    passwordInput.attr("type", "text");
+    passwordInput.attr("id", "password-input");
+    passwordInput.attr("placeholder", "Password");
+    var passwordSmall = $("<small>").attr("class", "form-text text-muted");
+    passwordSmall.attr("id", "passwordHelp");
+    passwordSmall.text("We'll never share your password with anyone else.");
+    passwordGroup.append(passwordLabel);
+    passwordGroup.append(passwordInput);
+    passwordGroup.append(passwordSmall);
+    loginForm.append(passwordGroup);
+
+    var loginSubmit = $("<button>").attr("class", "btn btn-primary");
+    loginSubmit.attr("type", "submit");
+    loginSubmit.attr("id", "login-submit");
+    loginSubmit.text("Log In");
+    loginForm.append(loginSubmit);
+
+    cardBody.append(cardTitle);
+    cardBody.append(loginForm);
+    card.append(cardBody);
+    $("#login").append(card);
+};
+
+// Display create account card
+var displayCreateAccount = function () {
+    var card = $("<div>").attr("class", "card");
+    card.attr("style", "width: 18rem;");
+    var cardBody = $("<div>").attr("class", "card-body");
+
+    var cardTitle = $("<h5>").attr("class", "card-title");
+    cardTitle.text("Create Account");
+    var createAccountForm = $("<form>");
+
+    var usernameGroup = $("<div>").attr("class", "form-group");
+    var usernameLabel = $("<label>").attr("for", "text");
+    usernameLabel.text("User Name");
+    var usernameInput = $("<input>").attr("class", "form-control");
+    usernameInput.attr("type", "text");
+    usernameInput.attr("id", "userCreate-input");
+    usernameInput.attr("placeholder", "User Name");
+    var usernameSmall = $("<small>").attr("class", "form-text text-muted");
+    usernameSmall.attr("id", "usernameHelp");
+    usernameSmall.text("We'll never share your username with anyone else.");
+    usernameGroup.append(usernameLabel);
+    usernameGroup.append(usernameInput);
+    usernameGroup.append(usernameSmall);
+    createAccountForm.append(usernameGroup);
+
+    var passwordGroup = $("<div>").attr("class", "form-group");
+    var passwordLabel = $("<label>").attr("for", "text");
+    passwordLabel.text("Password");
+    var passwordInput = $("<input>").attr("class", "form-control");
+    passwordInput.attr("type", "text");
+    passwordInput.attr("id", "passwordCreate-input");
+    passwordInput.attr("placeholder", "Password");
+    var passwordSmall = $("<small>").attr("class", "form-text text-muted");
+    passwordSmall.attr("id", "passwordHelp");
+    passwordSmall.text("We'll never share your password with anyone else.");
+    passwordGroup.append(passwordLabel);
+    passwordGroup.append(passwordInput);
+    passwordGroup.append(passwordSmall);
+    createAccountForm.append(passwordGroup);
+
+    var confirmGroup = $("<div>").attr("class", "form-group");
+    var confirmLabel = $("<label>").attr("for", "text");
+    confirmLabel.text("Confirm Password");
+    var confirmInput = $("<input>").attr("class", "form-control");
+    confirmInput.attr("type", "text");
+    confirmInput.attr("id", "passwordConfirm-input");
+    confirmInput.attr("placeholder", "Password");
+    confirmGroup.append(confirmLabel);
+    confirmGroup.append(confirmInput);
+    createAccountForm.append(confirmGroup);
+
+    var createAccountSubmit = $("<button>").attr("class", "btn btn-primary");
+    createAccountSubmit.attr("type", "submit");
+    createAccountSubmit.attr("id", "createAccount-submit");
+    createAccountSubmit.text("Submit");
+    createAccountForm.append(createAccountSubmit);
+
+    cardBody.append(cardTitle);
+    cardBody.append(createAccountForm);
+    card.append(cardBody);
+    $("#create-account").append(card);
+};
+
+// Login function
+var login = function(username, password) {
+    var name = username;
+    var pass = password;
     users.once("value", function(snapshot) {
         var validUser = false;
         var validPass = false;
@@ -59,38 +189,51 @@ $("#logged").on("click", function (event) {
             }
         });
         if (validUser == false) {
-            alert("invalid user");
+            // var modal = $("<div>").attr("class", "modal");
+            // var modalContent = $("<div>").attr("class", "modal-content");
+            // var modalSpan = $("<span>").attr("class", "close").text("&times;");
+            // var modalP = $("<p>").text("Invalid Username");
+
+            // modalContent.append(modalSpan);
+            // modalContent.append(modalP);
+            // modal.append(modalContent);
+            // modal.style.display = "block";
+
+            // modalSpan.onclick = function() {
+            //     modal.style.display = "none";
+            // }
+            var modal = document.getElementById('invalid-username');
+            var span = document.getElementsByClassName("user-close")[0];
+            modal.style.display = "block";
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
         }
         else if (validPass == false) {
-            alert("invalid password");
+            var modal = document.getElementById('invalid-password');
+            var span = document.getElementsByClassName("password-close")[0];
+            modal.style.display = "block";
+            span.onclick = function() {
+                modal.style.display = "none";
+            }        
         }
         else {
             currentUser = name;
             localStorage.clear();
             localStorage.setItem("username", currentUser);
-            $(".card").hide();
+            $("#login").empty();
+            $("#create-account").empty();
+            displayUserInfo();
             getDecks();
-            createDeck();
+            displayCreateDeck();
             displayDashboard(currentList);
             displayTable(currentList);
         };
-     });
-});
-// Create User/Password Function.
-    $("#created").on("click", function (event) {
-        event.preventDefault();
-            
-    var userCreate = $("#userCreate-input").val().trim();
-    var passCreate = $("#passwordCreate-input").val().trim();
-    var passConfirm = $("#passwordConfirm-input").val().trim();
-    if(passCreate === passConfirm) {
-        newUser(userCreate,passCreate);
-    };
-
+    });
+};
     
-//Code here to reference data base and look to see if username has already been added or not// If userName has been added  alert(newUserName must be chosen) If userName not added previously user can continue with creating account.
-});
-var newUser = function(username, password) {
+// Create Account function
+var createAccount = function(username, password) {
     var invalidUser = false;
     users.once("value", function(snapshot) {
         snapshot.forEach(function(userSnapshot) {
@@ -99,7 +242,12 @@ var newUser = function(username, password) {
             }
         });
         if (invalidUser == true) {
-            alert("Username is already taken.");
+            var modal = document.getElementById('invalid-username');
+            var span = document.getElementsByClassName("user-close")[0];
+            modal.style.display = "block";
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
         }
         else {
             users.child(username).set({
@@ -108,27 +256,40 @@ var newUser = function(username, password) {
             });
         };
     });
- };
-// Build a form for the user to create a new deck.
-function createDeck() {
-    $form = $("<form></form>");
-    $form.append('<input type="text" value="text" id="deck-input">');
-    $form.append('<input type="button" value="Add to Deck" id="confirm">');
-    $('#userStuff').append($form)
-    $("#confirm").on("click", function (event) {
-        event.preventDefault();
-        var deckName = $("#deck-input").val().trim();
-        addDeck(deckName);
-        getDecks();
-    });
-}
-// Function that will add newly created deck to the database...
-var addDeck = function(deckName) {
+};
+
+// Display user info
+var displayUserInfo = function() {
+    var user = $("<p>").attr("id", "active-user").text("Hello, you are logged in as " + currentUser);
+    var logoutBtn = $("<button>").attr("id", "logoutBtn").text("Logout");
+    $("#user-info").append(user);
+    $("#user-info").append(logoutBtn);
+};
+
+// Logout function
+var logout = function() {
+    currentUser = "";
+    localStorage.clear();
+    $(".user-stuff").empty();
+    checkUser();
+};
+
+// Display create deck form
+var displayCreateDeck = function() {
+    var deckForm = $("<form>");
+    deckForm.append('<input type="text" placeholder="Deck Name" id="deck-input">');
+    deckForm.append('<input type="button" value="Create Deck" id="createDeck-submit">');
+    $('#create-deck').append(deckForm);
+};
+
+// Create deck in database
+var createDeck = function(deckName) {
     var decks = users.child("/" + currentUser + "/decks");
     decks.child(deckName).set({
         deckName: deckName
     });  
 };
+
 // Dynamically display buttons (or similar elements) for all decks created by the user that when clicked will display the cards in that deck.
 var getDecks =  function() {
     $("#collection").empty();
@@ -194,7 +355,7 @@ var addCardToCollection = function(cardName, amount) {
             }
         });
         if (match === false) {
-            alert("Not a valid card.");
+            console.log("Not a valid card.");
         }
     });
 };
@@ -233,7 +394,7 @@ var addCardToDeck = function(deckName, cardName, amount) {
             }
         });
         if (match === false) {
-            alert("Not a valid card.");
+            console.log("Not a valid card.");
         }
     });
 };
@@ -311,7 +472,7 @@ var displayDashboard = function(listName) {
     var row3 = $("<div>").attr("class", "row");
     var pageForm = $("<form>").attr("id", "page-form");
     var pageLabel = $("<label>").attr("for", "page-input").attr("id", "page-label").text("View Page");
-    var pageInput = $("<textarea>").attr("type", "text").attr("id", "page-input");
+    var pageInput = $("<textarea>").attr("type", "text").attr("id", "page-input").attr("placeholder", "[page number]");
     var pageSubmit = $("<input>").attr("type", "submit").attr("id", "page-submit").text("Submit");
     pageForm.append(pageLabel);
     pageForm.append(pageInput);
@@ -346,16 +507,128 @@ var displayDashboard = function(listName) {
     removeCardsForm.append(removeCardsInput);
     removeCardsForm.append(removeCardsSubmit);
     removeCards.append(removeCardsForm);
-    
+
     // Append elements to html boilerplate
     $("#dashboard").append(meta);
     $("#dashboard").append(addCards);
     $("#dashboard").append(removeCards);
-}
+
+    // Generate show charts button
+    if (listName != "collection") {
+        var charts = $("<div>").attr("class", "col-md-2").attr("id", "charts");
+        var showCharts = $("<button>").attr("id", "charts-button").text("View Card Color Breakdown");
+        charts.append(showCharts);
+        $("#dashboard").append(charts);    
+    }
+};
+
+// Display Charts
+var displayCharts = function() {
+    if (currentList != "collection") {
+        var whiteMana = 0;
+        var blueMana = 0;
+        var blackMana = 0;
+        var redMana = 0;
+        var greenMana = 0;
+
+        // Calculate total mana for each color
+        for (var i = 0; i < totalMana.length; i++) {
+            if (totalMana[i] == "{W}") {
+                whiteMana++;
+            }
+            else if (totalMana[i] == "{U}") {
+                blueMana++;
+            }
+            else if (totalMana[i] == "{B}") {
+                blackMana++;
+            }
+            else if (totalMana[i] == "{R}") {
+                redMana++;
+            }
+            else if (totalMana[i] == "{G}") {
+                greenMana++;
+            }
+        };
+
+        // Define data for chart
+        var chartColors = [];
+        var borderColors = [];
+        var colorWhite = 'rgba(235, 235, 200, 1)';
+        var colorBlue = 'rgba(0, 130, 230, 1)';
+        var colorBlack = 'rgba(0, 0, 0, 1)';
+        var colorRed = 'rgba(235, 0, 0, 1)';
+        var colorGreen = 'rgba(0, 100, 0, 1)';
+
+        var presentMana = [];
+        var amountPerColor = [];
+        if (whiteMana != 0) {
+            presentMana.push("White Symbols");
+            amountPerColor.push(whiteMana);
+            chartColors.push(colorWhite);
+            borderColors.push('rgba(255, 255, 255, 1)');
+        }
+        if (blueMana != 0) {
+            presentMana.push("Blue Symbols");
+            amountPerColor.push(blueMana);
+            chartColors.push(colorBlue);
+            borderColors.push('rgba(255, 255, 255, 1)');
+        }
+        if (blackMana != 0) {
+            presentMana.push("Black Symbols");
+            amountPerColor.push(blackMana);
+            chartColors.push(colorBlack);
+            borderColors.push('rgba(255, 255, 255, 1)');
+        }
+        if (redMana != 0) {
+            presentMana.push("Red Symbols");
+            amountPerColor.push(redMana);
+            chartColors.push(colorRed);
+            borderColors.push('rgba(255, 255, 255, 1)');
+        }
+        if (greenMana != 0) {
+            presentMana.push("Green Symbols");
+            amountPerColor.push(greenMana);
+            chartColors.push(colorGreen);
+            borderColors.push('rgba(255, 255, 255, 1)');
+        }
+
+        console.log(presentMana);
+        console.log(amountPerColor);
+
+        // Create Doughnut Chart
+        var chartTitle = $("<p>").attr("id", "chart-title").text("Card Color Breakdown");
+        $("#charts").append(chartTitle);
+        var canvas = $("<canvas>").attr("id", "myChart");
+        canvas.attr("width", "100");
+        canvas.attr("height", "100");
+        $("#charts").append(canvas);
+        $("#dashboard").append(charts);
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: presentMana,
+                datasets: [{
+                    label: 'Card Color Breakdown',
+                    data: amountPerColor,
+                    backgroundColor: chartColors,
+                    borderColor: borderColors,
+                    borderWidth: 10
+                }]
+            },
+            options: {
+                legend: {
+                    display: false
+                }
+            }
+        });
+    };
+};
 
 // Display Cards on Table
 var displayTable = function(listName) {
     $("#list").empty();
+    totalMana = [];
 
     // Create table elements
     var table = $("<table>").attr("class", "table").attr("id", "card-table");
@@ -397,8 +670,13 @@ var displayTable = function(listName) {
                 }
                 cards.push(card);
             });
-            pages = Math.floor(cards.length / 100);
-            $("#page-label").text("Page " + (page + 1) + " of " + (pages));
+            pages = Math.ceil(cards.length / 100);
+            if (pages === 0) {
+                $("#page-label").text("Page 1 of 1");
+            }
+            else {
+                $("#page-label").text("Page " + (page + 1) + " of " + (pages));
+            }
             var cardsIndex = page * 100;
             for (i = 0; i < 100; i++) {
                 if ((cardsIndex + i) < cards.length) {
@@ -496,6 +774,40 @@ var displayTable = function(listName) {
                                 card.toughness = resultCard.toughness;
                             }
 
+                            // Get total mana cost for deck
+                            var breakdown = [];
+                            var manaCost = card.cost; 
+                            var index = 0;
+                            var stop = false;
+                            while(stop == false) {
+                                if (manaCost.length == 0) {
+                                    stop = true;
+                                }
+                                else if (manaCost[index] == "}") {
+                                    var mc = manaCost.substring(0, (index + 1));
+                                    if (manaCost.length > (index + 1)) {
+                                        manaCost = manaCost.substring(index+1);
+                                    }
+                                    else {
+                                        manaCost = "";
+                                    }
+                                    breakdown.push(mc);
+                                    index = 0;
+                                }
+                                else {
+                                    index++;
+                                };
+                            };
+                            if (card.amount > 1) {
+                                var totalBreakdown = [];
+                                totalBreakdown = totalBreakdown.concat(breakdown);
+                                for (var i = 1; i < card.amount; i++) {
+                                    totalBreakdown = totalBreakdown.concat(breakdown);
+                                }
+                                breakdown = totalBreakdown;
+                            }
+                            totalMana = totalMana.concat(breakdown);
+
                             // Create table row elements
                             var tr = $("<tr>");
                             var tdAmount = $("<td>").text(card.amount);
@@ -539,13 +851,62 @@ var displayTable = function(listName) {
             });
         });
     };
-    
     // Append table to html boilerplate
     table.append(tbody);
     $("#list").append(table);
 };
 
-// Click event for collection-button
+/*
+***$.on click events***
+#login-submit
+#createAccount-submit
+#logoutBtn
+#createDeck-submit
+.collection-button
+.deck-button
+#update
+#page-submit
+#deckName-submit
+#addCards-submit
+#removeCards-submit
+#charts-button
+*/
+
+// Click event for login
+$(document.body).on("click", "#login-submit", function (event) {
+    event.preventDefault();
+    var name = $("#username-input").val().trim();
+    var pass = $("#password-input").val().trim();
+    login(name, pass);
+});
+
+// Click event for create account
+$(document.body).on("click", "#createAccount-submit", function (event) {
+    event.preventDefault();
+    var username = $("#userCreate-input").val().trim();
+    var password = $("#passwordCreate-input").val().trim();
+    var confirm = $("#passwordConfirm-input").val().trim();
+    if(password === confirm) {
+        createAccount(username,password);
+    };
+});
+
+// Click event for logout
+$(document.body).on("click", "#logoutBtn", function() {
+    event.preventDefault();
+    logout();
+});
+
+// Click event for create deck
+$(document.body).on("click", "#createDeck-submit", function(event) {
+    event.preventDefault();
+    var deckName = $("#deck-input").val().trim();
+    createDeck(deckName);
+    getDecks();
+});
+
+
+// Click event for display collection button
 $(document.body).on("click", ".collection-button", function(event) {
     event.preventDefault();
     currentList = "collection";
@@ -554,12 +915,11 @@ $(document.body).on("click", ".collection-button", function(event) {
     displayTable(currentList);
 });
 
-// Click event for collection-button
+// Click event for display deck button
 $(document.body).on("click", ".deck-button", function(event) {
     event.preventDefault();;
     currentList = $(this).text();
-    console.log(currentList);
-
+    totalMana = [];
     displayDashboard(currentList);
     displayTable(currentList);
 });
@@ -568,6 +928,7 @@ $(document.body).on("click", ".deck-button", function(event) {
 $(document.body).on("click", "#update", function(event) {
     event.preventDefault();
 
+    displayDashboard(currentList);
     displayTable(currentList);
 });
 
@@ -726,4 +1087,11 @@ $(document.body).on("click", "#removeCards-submit", function(event) {
     // $('#removeCards-input').val(badText);
 });
 
-$(document).ready(checkUser);
+$(document.body).on("click", "#charts-button", function(event) {
+    event.preventDefault();
+    $("#charts").empty();
+    displayCharts();
+});
+
+// Initialize Website
+$(document).ready(checkUser());

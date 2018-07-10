@@ -1,0 +1,61 @@
+body {
+    background-image: url(../images/MTG_4.jpg);
+    font-family: 'IM Fell French Canon SC', serif; 
+    
+}
+.container {
+    float: center;  
+    font-size: 20px;
+    color: aliceblue;
+}
+#searchForm {
+    border: 1px solid black;
+    padding: 20px;
+    width: 800px;
+    margin: auto;
+    text-align: center;
+    background: rgb(250, 249, 249, 0.3);
+     font-size: 30px;
+  font-weight: bolder; 
+}
+.card {
+    display: inline;
+    
+    
+}
+#listId {
+   
+    margin-top: 20px;
+    
+}
+#list {
+    border: 1px;
+    flex-flow: wrap;
+    overflow: auto;
+    
+    
+}
+#info {
+   
+    padding: 10px;
+    text-align: left;
+}
+#nav a {
+    display: inline-block;
+    padding-left: 15px;
+    margin-left: 15px;
+    line-height: 18px;
+    color: #999;
+    border-left: 1px solid #efefef;
+}
+#nav {
+    float: right;
+    margin-top: 29px;
+}
+.title {
+    
+    float: right;
+    margin-top: 25px;
+    color: #999;
+    font-size: 25px;
+}

@@ -1,5 +1,10 @@
+
+
 // Will store the cards from the current API call
 var currentCards = {};
+$("#hide").click(function(){
+    $("info").hide();
+});
 
 // User clicks on the search button
 $('#searchBtn').on('click', function(event) {
@@ -21,12 +26,11 @@ $('#searchBtn').on('click', function(event) {
         method: 'GET'
     }).then(function(response) {
         // Clear the input element
-        $('#search').val('');
+        // $('#search').val('');
 
         // Store the results in a `results` variable
         var results = response.data;
-
-        // Loop through the results
+        console.log(results);        // Loop through the results
         for (let i = 0; i < results.length; i++) {
             // Store the result at the current index in the results in a `result` variable
             var result = results[i];
@@ -37,7 +41,7 @@ $('#searchBtn').on('click', function(event) {
             // Append the card to `#list`
             // `src` is pretty obvious
             // `data-id` is equal to result.id, meaning it is the same as what we stored it in the `currentCards` object as
-            $('#list').append("<img src='" + result.image_uris['normal'] + "' class='card' data-id='" + result.id + "' /><br />");
+            $('#list').append("<img src='" + result.image_uris['normal'] + "' class='card' data-id='" + result.id + "' width='250px' height='350px'/>");
         }
     });
 });
@@ -45,8 +49,9 @@ $('#searchBtn').on('click', function(event) {
 // User clicks on a card
 $('#list').on('click', '.card', function() {
     // Empty the `#searchForm` element
-    $('#searchForm').empty();
-
+    // $('#searchForm').empty();
+    $("#info").empty();
+    $('#oneCard').empty();
     // Empty the `#list` element
     $("#list").empty();
     
@@ -59,21 +64,28 @@ $('#list').on('click', '.card', function() {
     var name = card.name;
     var creature = card.type_line;
     var flavorText = card.flavor_text;
-    var legality = card.legalities;
-    var cardFront = "<img src='" + card.image_uris['normal'] + "' />";
+    var cardText = card.oracle_text;
+    var cost = card.mana_cost;
+    var power = card.power;
+    var toughness = card.toughness;
+    var cardFront = "<img src='" + card.image_uris['normal'] + "' width='300px' height='400px'/>";
 
     // Join all of the data with `<br />`s
-    var data = [name, creature, flavorText, legality].join("<br />");
-
+    var powTough = [power, toughness].join("/")
+    var data = [name, creature, cardText, flavorText, cost, powTough].join("<br/>");
+    
     // Append the data to `#info`
-    $('#info').append(data);
+    $('#info').append(data, "<br>");
     // Append the card front to `#oneCard`
     $('#oneCard').append(cardFront);
+
+    var addCard =  $('#info').append("<button>Add Card to Collection</button>")
+
+    var addCardBtn = addCard.append(data);
+    
+    addCardBtn.on('click', addCardToCollection());
+    
 });
 
 
 
-
-
-
- 
