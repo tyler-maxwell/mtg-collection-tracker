@@ -552,6 +552,7 @@ var displayCharts = function() {
 
         // Define data for chart
         var chartColors = [];
+        var borderColors = [];
         var colorWhite = 'rgba(235, 235, 200, 1)';
         var colorBlue = 'rgba(0, 130, 230, 1)';
         var colorBlack = 'rgba(0, 0, 0, 1)';
@@ -564,26 +565,31 @@ var displayCharts = function() {
             presentMana.push("White Symbols");
             amountPerColor.push(whiteMana);
             chartColors.push(colorWhite);
+            borderColors.push('rgba(255, 255, 255, 1)');
         }
         if (blueMana != 0) {
             presentMana.push("Blue Symbols");
             amountPerColor.push(blueMana);
             chartColors.push(colorBlue);
+            borderColors.push('rgba(255, 255, 255, 1)');
         }
         if (blackMana != 0) {
             presentMana.push("Black Symbols");
             amountPerColor.push(blackMana);
             chartColors.push(colorBlack);
+            borderColors.push('rgba(255, 255, 255, 1)');
         }
         if (redMana != 0) {
             presentMana.push("Red Symbols");
             amountPerColor.push(redMana);
             chartColors.push(colorRed);
+            borderColors.push('rgba(255, 255, 255, 1)');
         }
         if (greenMana != 0) {
             presentMana.push("Green Symbols");
             amountPerColor.push(greenMana);
             chartColors.push(colorGreen);
+            borderColors.push('rgba(255, 255, 255, 1)');
         }
 
         console.log(presentMana);
@@ -606,8 +612,8 @@ var displayCharts = function() {
                     label: 'Card Color Breakdown',
                     data: amountPerColor,
                     backgroundColor: chartColors,
-                    borderColor: chartColors,
-                    borderWidth: 1
+                    borderColor: borderColors,
+                    borderWidth: 10
                 }]
             },
             options: {
