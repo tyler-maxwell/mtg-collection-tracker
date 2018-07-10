@@ -552,11 +552,11 @@ var displayCharts = function() {
 
         // Define data for chart
         var chartColors = [];
-        var colorWhite = 'rgba(235, 235, 0, 1)';
+        var colorWhite = 'rgba(235, 235, 200, 1)';
         var colorBlue = 'rgba(0, 130, 230, 1)';
         var colorBlack = 'rgba(0, 0, 0, 1)';
-        var colorRed = 'rgba(255, 0, 0, 1)';
-        var colorGreen = 'rgba(0, 150, 0, 1)';
+        var colorRed = 'rgba(235, 0, 0, 1)';
+        var colorGreen = 'rgba(0, 100, 0, 1)';
 
         var presentMana = [];
         var amountPerColor = [];
