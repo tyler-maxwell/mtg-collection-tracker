@@ -61,6 +61,7 @@ var checkUser = function() {
 // Display login card
 var displayLogin = function () {
     var card = $("<div>").attr("class", "card");
+    card.attr("id", "login-card");
     card.attr("style", "width: 18rem;");
     var cardBody = $("<div>").attr("class", "card-body");
 
@@ -260,7 +261,7 @@ var createAccount = function(username, password) {
 
 // Display user info
 var displayUserInfo = function() {
-    var user = $("<p>").attr("id", "active-user").text("Hello, you are logged in as " + currentUser);
+    var user = $("<p>").attr("id", "active-user").text("Hello, you are logged in as: " + currentUser);
     var logoutBtn = $("<button>").attr("id", "logoutBtn").text("Logout");
     $("#user-info").append(user);
     $("#user-info").append(logoutBtn);
@@ -452,13 +453,11 @@ var displayDashboard = function(listName) {
 
     // Generate update table button
     var meta = $("<div>").attr("class", "col-md-2");
-    var row1 = $("<div>").attr("class", "row");
+    var meta2 = $("<div>").attr("class", "col-md-2");
     var updateBtn = $("<button>").attr("id", "update").text("Update Table");
-    row1.append(updateBtn);
-    meta.append(row1);
+    meta.append(updateBtn);
 
     // Generate change deck name form
-    var row2 = $("<div>").attr("class", "row");
     var deckNameForm = $("<form>").attr("id", "deckName-form");
     var deckNameLabel = $("<label>").attr("for", "deckName-input").text("Change Deck Name");
     var deckNameInput = $("<textarea>").attr("type", "text").attr("id", "deckName-input");
@@ -466,10 +465,8 @@ var displayDashboard = function(listName) {
     deckNameForm.append(deckNameLabel);
     deckNameForm.append(deckNameInput);
     deckNameForm.append(deckNameSubmit);
-    row2.append(deckNameForm);
 
     // Generate a display by page form
-    var row3 = $("<div>").attr("class", "row");
     var pageForm = $("<form>").attr("id", "page-form");
     var pageLabel = $("<label>").attr("for", "page-input").attr("id", "page-label").text("View Page");
     var pageInput = $("<textarea>").attr("type", "text").attr("id", "page-input").attr("placeholder", "[page number]");
@@ -477,14 +474,13 @@ var displayDashboard = function(listName) {
     pageForm.append(pageLabel);
     pageForm.append(pageInput);
     pageForm.append(pageSubmit);
-    row3.append(pageForm);
 
     if (listName == "collection") {
-        meta.append(row3);
+        meta2.append(pageForm);
     }
     else {
-        meta.append(row2);
-    }
+        meta2.append(deckNameForm);
+    };
 
     // Generate add cards form
     var addCards = $("<div>").attr("class", "col-md-3");
@@ -510,6 +506,7 @@ var displayDashboard = function(listName) {
 
     // Append elements to html boilerplate
     $("#dashboard").append(meta);
+    $("#dashboard").append(meta2);
     $("#dashboard").append(addCards);
     $("#dashboard").append(removeCards);
 

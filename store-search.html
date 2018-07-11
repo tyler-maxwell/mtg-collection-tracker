@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Store Search</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <title>Where to Buy</title>
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous"> -->
     <link rel="stylesheet" href="assets/css/store-search.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=IM+Fell+French+Canon+SC" rel="stylesheet">
 </head>
+
 <body>
-    
-    <div class="container-fluid">
+
+    <div class="container">
 
         <div class="row" id="header">
             <div class="col-md-6" id="logo">
@@ -25,13 +30,181 @@
 
         <div class="row">
             <div class="col-md-12" id="list">
-
+                <div id="container">
+                    <form id="Form">
+                        <label for="zipcode-input">Enter Zipcode:</label>
+                        <input type="text" id="zipcode-input">
+                        <input id="zipcode-submit" type="submit" value="submit">
+                    </form>
+                    <!-- <div class="row"></div> -->
+                        <div id="addressCard">
+                        </div>
+                        </div>
+                    <div id="map"></div>
+                </div>
             </div>
         </div>
+       
+        
     </div>
+
+
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="assets/js/store-search.js"></script>
+    <script async defer>
+        var zipcode = "";
+        var queryURL = "";
+        var geoCodeQueryURL = "";
+        var lat = "";
+        var lng = "";
+        var locationsArray = [];
+        var infoWindow = "";
+
+        $("#zipcode-submit").on("click", function (event) {
+            event.preventDefault();
+            zipcode = $("#zipcode-input").val().trim();
+            $("#zipcode-input").val("");
+            queryURL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=comic+books+" + zipcode + "&key=AIzaSyBZ0TzQDx6W_sE2eYvyDglJbiQft94v1mM";
+            geoCodeQueryURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + zipcode + "&key=AIzaSyBZ0TzQDx6W_sE2eYvyDglJbiQft94v1mM"
+            // console.log(zipcode);   
+            // console.log(queryURL);
+
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).then(function (response) {
+                locationsArray = response.results;
+                console.log(locationsArray);
+            });
+            $.ajax({
+                url: geoCodeQueryURL,
+                method: "GET"
+            }).then(function (geoCode) {
+                console.log (geoCode);
+                lat = geoCode.results[0].geometry.location.lat;
+                lng = geoCode.results[0].geometry.location.lng;
+                console.log (lat, lng);
+                updateMap();
+                setMarkers(locationsArray, map);
+                cardRender(locationsArray);
+            });
+        });
+
+        function cardRender(locationsArray) {
+            $("#addressCard").empty()
+            locationsArray.forEach(function (result) {
+                var col = $("<div>").addClass("col-sm-6") 
+                var card = $("<div>").addClass("card")
+                // var image =$("<img>").addClass("card-img-top");
+                // image.attr("src", result.)
+                var body = $("<div>").addClass("card-body");
+                var title = $(`<h5 class = 'card-title'>${result.name}</h5>`)
+                var address = $(`<h6 class = 'store-address'>${result.formatted_address}</h6>`)
+                body.append(title);
+                body.append(address);
+                card.append(body);
+                col.append(card);
+                $("#addressCard").append(col);
+            })
+        }
+
+
+
+
+        var map;
+        // function getLocation() {
+        //         (navigator.geolocation) 
+        //             navigator.geolocation.getCurrentPosition(showPosition);
+        //     }
+        //     getLocation();
+        //     function showPosition(position) {
+        //         // $(".lat").text("Your current latitude is: " + position.coords.latitude);
+        //          console.log(position);
+        //         // $(".long").text("Your current longitude is: " + position.coords.longitude); 
+        //     lat = (position.coords.latitude);
+        //     lng = (position.coords.longitude);
+        //     console.log(lat);
+        //     console.log(lng);
+        //     }
+        // var lat = "";
+        // var long = "";
+
+        function initMap() {
+            // function getLocation() {
+            //     (navigator.geolocation)
+            //     navigator.geolocation.getCurrentPosition(showPosition);
+            // }
+            // getLocation();
+            // function showPosition(position) {
+            //     // $(".lat").text("Your current latitude is: " + position.coords.latitude);
+            //     //  console.log(position);
+            //     // $(".long").text("Your current longitude is: " + position.coords.longitude); 
+            //     lat = (position.coords.latitude);
+            //     lng = (position.coords.longitude);
+            //     // console.log(lat);
+            //     // console.log(lng);
+            // }
+            var home = new google.maps.LatLng(33.7762222, -84.39001569999999);
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: home,
+                zoom: 10,
+                mapTypeId: google.maps.MapTypeId.HYBRID,
+            });
+        }
+
+        function updateMap() {
+            var home = new google.maps.LatLng(lat, lng);
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: home,
+                zoom: 12,
+                mapTypeId: google.maps.MapTypeId.HYBRID,
+            });
+
+            //   var marker = new google.maps.Marker({
+            // position: {lat:lat, lng:lng},
+            // title: "Hello World!"
+            // })
+            // console.log(lat, lng);
+            // marker.setMap(map); 
+        }
+
+        function setMarkers(resultsArray, map) {
+            var location;
+            var marker;
+            var infowindow = new google.maps.InfoWindow({
+                content: locationsArray.name
+            });
+            resultsArray.forEach(function (result) {
+
+                location = result.geometry.location;
+                marker = new google.maps.Marker({
+                    position: location,
+                    title: result.name
+                });
+                marker.setMap(map);
+                marker.addListener('click', function () {
+                    // var text = `${result.name}\r\n${result.formatted_address}`
+                    var link = $(result.photos[0].html_attributions[0])
+                    infowindow.open(map, this);
+                    infowindow.setContent(result.name);
+
+
+
+                });
+            });
+        }
+
+
+
+
+
+
+    </script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZ0TzQDx6W_sE2eYvyDglJbiQft94v1mM&libraries=places&callback=initMap"
+        async defer></script>
 
 </body>
+
 </html>

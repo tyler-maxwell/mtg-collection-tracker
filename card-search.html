@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="assets/css/card-search.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-    <script src="assets/js/card-search.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
 </head>
 
 <body>
@@ -41,6 +41,7 @@
         <br>
         <br>
         <input id="searchBtn" type="submit" value="Card Search">
+        <input id="loginBtn" type="submit" value="Login">
     </form>
     <br>
     <!-- below is where the card informatino will display -->
@@ -60,9 +61,45 @@
         </div>
     </div>
 
+    <div id="user-login" class="modal">
+        <div class="modal-content">
+          <span class="close login-close">&times;</span>
+          <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                  <h5 class="card-title">Login</h5>
+                  <form>
+                      <div class="form-group">
+                          <label for="text">User Name</label>
+                          <input type="text" class="form-control" id="username-input" placeholder="User Name">
+                          <small class="form-text text-muted" id="usernameHelp">We'll never share your username with anyone else.</small>
+                      </div>
+                      <div class="form-group">
+                          <label for="text">Password</label>
+                          <input type="text" class="form-control" id="password-input" placeholder="Password">
+                          <small class="form-text text-muted" id="usernameHelp">We'll never share your password with anyone else.</small>
+                      </div>
+                      <button class="btn btn-primary" type="submit" id="login-submit">Log In</button>
+                  </form>
+              </div>
+          </div>
+        </div>
+    </div>
+
+    <div id="invalid-username" class="modal">
+        <div class="modal-content">
+          <span class="close user-close">&times;</span>
+          <p class="text-center">Invalid Username</p>
+        </div>
+    </div>
+
+    <div id="invalid-password" class="modal">
+        <div class="modal-content">
+          <span class="close password-close">&times;</span>
+          <p class="text-center">Invalid Password</p>
+        </div>
+    </div>    
 
     <script src="assets/js/card-search.js"></script>
 
 </body>
-
 </html>
