@@ -1,0 +1,40 @@
+body {
+    border: 2px solid black;
+    background-image: url(../images/mtgbackground.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 100%;
+    font-family: 'IM Fell French Canon SC', serif;
+}
+
+#container{
+    width: 100%;
+    height: 10%;
+}
+#map {
+    width: 60%;
+    height: 400px;
+    padding: 0px;
+    margin: 10% auto;
+    float: right;
+}
+
+#addressCard {
+    margin: 8% auto;
+    float: left;
+    height: 400px;
+    width: 40%;
+    text-align: center;
+    
+}
+.card{
+/* clear: left; */
+border: 1px solid black;
+   /* background: rgb(250, 249, 249, 0.3); */
+   margin: 5px;
+   color: white;
+}
+#Form{
+    margin: 10px auto;
+    text-align: center;
+}

@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>User Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=IM+Fell+French+Canon+SC" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/list.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
@@ -16,7 +17,7 @@
 
         <div class="row" id="header">
             <div class="col-md-6" id="logo">
-                <a href="index.html">Magic: The Gathering Collection Tracker</a>
+                <a class="title" href="index.html">Magic: The Gathering Collection Tracker</a>
             </div>
             <div class="col-md-6">
                 <div id="nav">
@@ -27,7 +28,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row" class="both">
             <div class="col-md-6" id="login"></div>
             <div class="col-md-6" id="create-account"></div>
         </div>
@@ -37,12 +38,15 @@
                 <div class="row user-stuff" id="user-info"></div>
                 <div class="row user-stuff" id="create-deck"></div>
             </div>
+            <br>
             <div class="col-md-8 user-stuff" id="collection"></div>
         </div> 
+        <br>
 
         <div class="row">
             <div class="col-md-12">
                 <div class="row user-stuff" id="table-title"></div>
+                <br>
                 <div class="row user-stuff" id="dashboard"></div>
             </div>
         </div>
