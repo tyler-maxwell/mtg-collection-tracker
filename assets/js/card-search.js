@@ -59,6 +59,16 @@ $('#searchBtn').on('click', function(event) {
             $('#list').append("<img src='" + result.image_uris['normal'] + "' class='card' data-id='" + result.id + "' width='250px' height='350px'/>");
         }
     });
+
+    $("#info").empty();
+    $('#oneCard').empty();
+
+    //Styles
+    $("#info").css("border", "");
+    $("#info").css("border-radius", "");
+    $("#info").css("color", "");
+    $("#info").css("background", "");
+    $("#info").css("margin-bottom", "");
 });
 
 // User clicks on a card
@@ -130,6 +140,13 @@ $('#list').on('click', '.card', function() {
             $("#info").append(decksForm);
         });
     }
+
+    //Styles
+    $("#info").css("border", "2px solid black");
+    $("#info").css("border-radius", "4px");
+    $("#info").css("color", "white");
+    $("#info").css("background", "rgb(0, 0, 0, 0.8)");
+    $("#info").css("margin-bottom", "20px");
 });
 
 
