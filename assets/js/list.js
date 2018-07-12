@@ -51,6 +51,17 @@ var checkUser = function() {
         displayCreateDeck();
         displayDashboard(currentList);
         displayTable(currentList);
+        $("#user-meta").css("margin", "10px");
+        $("#user-meta").css("border", "1px solid #331B0D");
+        $("#user-meta").css("border-radius", "4px");
+        $("#user-meta").css("background-color", "rgb(51, 27, 13, 0.9)");
+        $("#user-meta").css("color", "teal");
+        $("#collection").css("margin-top", "10px");
+        $("#collection").css("border", "1px solid #331B0D");
+        $("#collection").css("border-radius", "4px");
+        $("#collection").css("background-color", "rgb(51, 27, 13, 0.9)");
+        $("#collection").css("padding", "10px");
+        $("#collection").css("height", "256px");
     }
     else{
         displayLogin();
@@ -76,7 +87,7 @@ var displayLogin = function () {
     usernameInput.attr("type", "text");
     usernameInput.attr("id", "username-input");
     usernameInput.attr("placeholder", "User Name");
-    var usernameSmall = $("<small>").attr("class", "form-text text-muted");
+    var usernameSmall = $("<small>").attr("class", "form-text");
     usernameSmall.attr("id", "usernameHelp");
     usernameSmall.text("We'll never share your username with anyone else.");
     usernameGroup.append(usernameLabel);
@@ -91,7 +102,7 @@ var displayLogin = function () {
     passwordInput.attr("type", "text");
     passwordInput.attr("id", "password-input");
     passwordInput.attr("placeholder", "Password");
-    var passwordSmall = $("<small>").attr("class", "form-text text-muted");
+    var passwordSmall = $("<small>").attr("class", "form-text");
     passwordSmall.attr("id", "passwordHelp");
     passwordSmall.text("We'll never share your password with anyone else.");
     passwordGroup.append(passwordLabel);
@@ -109,6 +120,21 @@ var displayLogin = function () {
     cardBody.append(loginForm);
     card.append(cardBody);
     $("#login").append(card);
+
+    // Body styles
+    $('body').css('background-image', 'url(assets/images/MTG_5.jpg)');
+    $('body').css('background-size', 'cover');
+    $("#user-meta").css("margin", "");
+    $("#user-meta").css("border", "");
+    $("#user-meta").css("border-radius", "");
+    $("#user-meta").css("background-color", "");
+    $("#user-meta").css("color", "");
+    $("#collection").css("margin-top", "");
+    $("#collection").css("border", "");
+    $("#collection").css("border-radius", "");
+    $("#collection").css("background-color", "");
+    $("#collection").css("padding", "");
+    $("#collection").css("height", "");
 };
 
 // Display create account card
@@ -128,7 +154,7 @@ var displayCreateAccount = function () {
     usernameInput.attr("type", "text");
     usernameInput.attr("id", "userCreate-input");
     usernameInput.attr("placeholder", "User Name");
-    var usernameSmall = $("<small>").attr("class", "form-text text-muted");
+    var usernameSmall = $("<small>").attr("class", "form-text");
     usernameSmall.attr("id", "usernameHelp");
     usernameSmall.text("We'll never share your username with anyone else.");
     usernameGroup.append(usernameLabel);
@@ -143,7 +169,7 @@ var displayCreateAccount = function () {
     passwordInput.attr("type", "text");
     passwordInput.attr("id", "passwordCreate-input");
     passwordInput.attr("placeholder", "Password");
-    var passwordSmall = $("<small>").attr("class", "form-text text-muted");
+    var passwordSmall = $("<small>").attr("class", "form-text");
     passwordSmall.attr("id", "passwordHelp");
     passwordSmall.text("We'll never share your password with anyone else.");
     passwordGroup.append(passwordLabel);
@@ -229,6 +255,19 @@ var login = function(username, password) {
             displayCreateDeck();
             displayDashboard(currentList);
             displayTable(currentList);
+            $('body').css('background-image', '');
+            $('body').css('background-size', '');
+            $("#user-meta").css("margin", "10px");
+            $("#user-meta").css("border", "1px solid #331B0D");
+            $("#user-meta").css("border-radius", "4px");
+            $("#user-meta").css("background-color", "rgb(51, 27, 13, 0.9)");
+            $("#user-meta").css("color", "teal");
+            $("#collection").css("margin-top", "10px");
+            $("#collection").css("border", "1px solid #331B0D");
+            $("#collection").css("border-radius", "4px");
+            $("#collection").css("background-color", "rgb(51, 27, 13, 0.9)");
+            $("#collection").css("padding", "10px");
+            $("#collection").css("height", "256px");
         };
     });
 };
@@ -261,8 +300,9 @@ var createAccount = function(username, password) {
 
 // Display user info
 var displayUserInfo = function() {
-    var user = $("<p>").attr("id", "active-user").text("Hello, you are logged in as: " + currentUser);
+    var user = $("<p>").attr("id", "active-user").text("Hello, you are logged in as: \n" + currentUser);
     var logoutBtn = $("<button>").attr("id", "logoutBtn").text("Logout");
+    logoutBtn.attr("class", "btn btn-primary");
     $("#user-info").append(user);
     $("#user-info").append(logoutBtn);
 };
@@ -294,14 +334,14 @@ var createDeck = function(deckName) {
 // Dynamically display buttons (or similar elements) for all decks created by the user that when clicked will display the cards in that deck.
 var getDecks =  function() {
     $("#collection").empty();
-    var collectionButton = $("<button>").attr("class", "collection-button");
+    var collectionButton = $("<button>").attr("class", "btn btn-primary collection-button");
     collectionButton.text("Collection");
     $("#collection").append(collectionButton);
     var deckList = users.child("/" + currentUser + "/decks");
     deckList.once("value", function(snapshot) {
         snapshot.forEach(function(deckSnapshot) {
             deckData = deckSnapshot.val();
-            var deckButton = $("<button>").attr("class", "deck-button");
+            var deckButton = $("<button>").attr("class", "btn btn-primary deck-button");
             deckButton.text(deckData.deckName);
             $("#collection").append(deckButton);
         });
@@ -455,11 +495,13 @@ var displayDashboard = function(listName) {
     var meta = $("<div>").attr("class", "col-md-2");
     var meta2 = $("<div>").attr("class", "col-md-2");
     var updateBtn = $("<button>").attr("id", "update").text("Update Table");
+    updateBtn.attr("class", "btn btn-primary");
     meta.append(updateBtn);
 
     // Generate change deck name form
     var deckNameForm = $("<form>").attr("id", "deckName-form");
     var deckNameLabel = $("<label>").attr("for", "deckName-input").text("Change Deck Name");
+    deckNameLabel.attr("class", "dash-label");
     var deckNameInput = $("<textarea>").attr("type", "text").attr("id", "deckName-input");
     var deckNameSubmit = $("<input>").attr("type", "submit").attr("id", "deckName-submit").text("Submit");
     deckNameForm.append(deckNameLabel);
@@ -469,6 +511,7 @@ var displayDashboard = function(listName) {
     // Generate a display by page form
     var pageForm = $("<form>").attr("id", "page-form");
     var pageLabel = $("<label>").attr("for", "page-input").attr("id", "page-label").text("View Page");
+    pageLabel.attr("class", "dash-label");
     var pageInput = $("<textarea>").attr("type", "text").attr("id", "page-input").attr("placeholder", "[page number]");
     var pageSubmit = $("<input>").attr("type", "submit").attr("id", "page-submit").text("Submit");
     pageForm.append(pageLabel);
@@ -486,6 +529,7 @@ var displayDashboard = function(listName) {
     var addCards = $("<div>").attr("class", "col-md-3");
     var addCardsForm = $("<form>").attr("id", "addCards-form");
     var addCardsLabel = $("<label>").attr("for", "addCards-input").text("Add Cards");
+    addCardsLabel.attr("class", "dash-label");
     var addCardsInput = $("<textarea>").attr("id", "addCards-input").attr("placeholder", "[amount] [card name]\n[amount] [card name]\n...");
     var addCardsSubmit = $("<input>").attr("type", "submit").attr("id", "addCards-submit").text("Submit");
     addCardsForm.append(addCardsLabel);
@@ -497,6 +541,7 @@ var displayDashboard = function(listName) {
     var removeCards = $("<div>").attr("class", "col-md-3");
     var removeCardsForm = $("<form>").attr("id", "removeCards-form");
     var removeCardsLabel = $("<label>").attr("for", "removeCards-input").text("Remove Cards");
+    removeCardsLabel.attr("class", "dash-label");
     var removeCardsInput = $("<textarea>").attr("id", "removeCards-input").attr("placeholder", "[amount] [card name]\n[amount] [card name]\n...");
     var removeCardsSubmit = $("<input>").attr("type", "submit").attr("id", "removeCards-submit").text("Submit");
     removeCardsForm.append(removeCardsLabel);
@@ -513,7 +558,8 @@ var displayDashboard = function(listName) {
     // Generate show charts button
     if (listName != "collection") {
         var charts = $("<div>").attr("class", "col-md-2").attr("id", "charts");
-        var showCharts = $("<button>").attr("id", "charts-button").text("View Card Color Breakdown");
+        var showCharts = $("<button>").attr("id", "charts-button").text("Card Color Breakdown");
+        showCharts.attr("class", "btn btn-primary");
         charts.append(showCharts);
         $("#dashboard").append(charts);    
     }
@@ -550,7 +596,7 @@ var displayCharts = function() {
         // Define data for chart
         var chartColors = [];
         var borderColors = [];
-        var colorWhite = 'rgba(235, 235, 200, 1)';
+        var colorWhite = 'rgba(255, 255, 255, 1)';
         var colorBlue = 'rgba(0, 130, 230, 1)';
         var colorBlack = 'rgba(0, 0, 0, 1)';
         var colorRed = 'rgba(235, 0, 0, 1)';
@@ -562,31 +608,31 @@ var displayCharts = function() {
             presentMana.push("White Symbols");
             amountPerColor.push(whiteMana);
             chartColors.push(colorWhite);
-            borderColors.push('rgba(255, 255, 255, 1)');
+            borderColors.push('rgba(245,222,179, 1)');
         }
         if (blueMana != 0) {
             presentMana.push("Blue Symbols");
             amountPerColor.push(blueMana);
             chartColors.push(colorBlue);
-            borderColors.push('rgba(255, 255, 255, 1)');
+            borderColors.push('rgba(245,222,179, 1)');
         }
         if (blackMana != 0) {
             presentMana.push("Black Symbols");
             amountPerColor.push(blackMana);
             chartColors.push(colorBlack);
-            borderColors.push('rgba(255, 255, 255, 1)');
+            borderColors.push('rgba(245,222,179, 1)');
         }
         if (redMana != 0) {
             presentMana.push("Red Symbols");
             amountPerColor.push(redMana);
             chartColors.push(colorRed);
-            borderColors.push('rgba(255, 255, 255, 1)');
+            borderColors.push('rgba(245,222,179, 1)');
         }
         if (greenMana != 0) {
             presentMana.push("Green Symbols");
             amountPerColor.push(greenMana);
             chartColors.push(colorGreen);
-            borderColors.push('rgba(255, 255, 255, 1)');
+            borderColors.push('rgba(245,222,179, 1)');
         }
 
         console.log(presentMana);
