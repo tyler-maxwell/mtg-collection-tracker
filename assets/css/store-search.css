@@ -1,40 +1,74 @@
 body {
-    border: 2px solid black;
-    background-image: url(../images/mtgbackground.jpg);
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    height: 100%;
-    font-family: 'IM Fell French Canon SC', serif;
-}
+    background-image: url(../images/MTG_8.jpg);
+    background-size:cover;
+    font-family: 'IM Fell French Canon SC', serif; 
+    }
 
-#container{
-    width: 100%;
-    height: 10%;
-}
-#map {
-    width: 60%;
-    height: 400px;
-    padding: 0px;
-    margin: 10% auto;
-    float: right;
-}
-
-#addressCard {
-    margin: 8% auto;
-    float: left;
-    height: 400px;
-    width: 40%;
-    text-align: center;
+    #header {
+        background-color: #331B0D;
+     }
+     
+     .title { 
+        float: right;
+        color: teal;
+        font-size: 30px;
+        font-weight: 700;
+        padding-top: 15px;
+        text-align: center;
+        text-decoration: none;
+     }#nav {
+        float: left;
+        margin-top: 25px;
+     }
+     
+     #nav a {
+        display: inline-block;
+        padding-left: 15px;
+        margin-left: 15px;
+        margin-bottom: 20px;
+        color: teal;
+        text-decoration: none;
+        border-left: 1px solid black;
+     }
+     
+     #nav a:first-child {
+        border-left: 0 none;
+     }
+     
+     #nav a:hover {
+        color: yellow;
+     }
+    #Form {
+        margin-top: 100px; 
+        color: white;
+       border: 1px solid black; 
+       background: rgba(53, 53, 71, 0.3);
+       width: 350px;
+       height: 120px;
+       padding: 30px;
+       text-align: center; 
     
-}
-.card{
-/* clear: left; */
-border: 1px solid black;
-   /* background: rgb(250, 249, 249, 0.3); */
-   margin: 5px;
-   color: white;
-}
-#Form{
-    margin: 10px auto;
-    text-align: center;
-}
+       
+    }
+    #map {
+       width: 50%;
+       height: 500px;
+       float: right;
+       border: 3px solid rgba(28, 28, 31, 0.3);
+    }
+    #addressCard {
+        margin: 8% auto;
+        float: left;
+        height: 400px;
+        width: 40%;
+        text-align: center;
+        
+    }
+    .card{
+    /* clear: left; */
+    border: 1px solid black;
+       /* background: rgb(250, 249, 249, 0.3); */
+       margin: 5px;
+       color: white;
+    }
+   
